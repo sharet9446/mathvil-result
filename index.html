@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>매쓰빌</title>
+    <link rel="stylesheet" href="mathvil-result.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div class="home-icon">🏠</div>
+        <h1>진단결과</h1>
+        <div>
+          <div class="grade-badge" id="difficultyLevel">사고력</div>
+          <div class="age" id="studentAge">6세</div>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- 점수 섹션 -->
+        <div class="score-section">
+          <div class="score-title">
+            <span class="score-main" id="totalScore">0</span>
+            <span class="score-unit">점</span>
+          </div>
+          <h2 id="scoreTitle">결과를 불러오는 중...</h2>
+          <div class="score-message">
+            <p id="scoreDescription">잠시만 기다려주세요.</p>
+          </div>
+        </div>
+
+        <!-- 문항별 득점 -->
+        <div class="question-section">
+          <div class="section-title">문항별 득점</div>
+          <div class="question-note">
+            * 문항 번호를 누르면 자세히 볼 수 있습니다.
+          </div>
+          <div class="question-tables" id="questionTables">
+            <!-- JavaScript로 생성 -->
+          </div>
+        </div>
+
+        <div class="chart-analysis-row">
+          <!-- 영역별 분석 차트 -->
+          <div class="chart-section">
+            <div class="section-title">영역별 분석</div>
+            <div class="legend">
+              <div class="legend-item">
+                <div class="legend-color legend-my"></div>
+                <span>나의 점수</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color legend-avg"></div>
+                <span>평균</span>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="barChart" class="bar-chart"></canvas>
+            </div>
+
+            <!-- 단원별 분석 표 -->
+            <table class="analysis-table">
+              <thead>
+                <tr>
+                  <th>영역</th>
+                  <th>배점</th>
+                  <th>득점</th>
+                  <th>백분율</th>
+                  <th>평균</th>
+                </tr>
+              </thead>
+              <tbody id="analysisTableBody">
+                <!-- JavaScript로 생성 -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 5대 영재사고력 -->
+          <div class="radar-section">
+            <div class="section-title">5대 영재사고력</div>
+            <div class="legend">
+              <div class="legend-item">
+                <div class="legend-color legend-my"></div>
+                <span>나의 점수</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color legend-avg"></div>
+                <span>평균</span>
+              </div>
+            </div>
+            <div class="radar-chart-container">
+              <canvas id="radarChart" class="radar-chart"></canvas>
+            </div>
+
+            <!-- 5대 영재사고력 표 -->
+            <table class="skills-table">
+              <thead>
+                <tr>
+                  <th>분야</th>
+                  <th>수리</th>
+                  <th>논리독해</th>
+                  <th>카운팅</th>
+                  <th>공간</th>
+                  <th>추리</th>
+                </tr>
+              </thead>
+              <tbody id="skillsTableBody">
+                <!-- JavaScript로 생성 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 과정별 설명 표 -->
+        <div class="description-table-section">
+          <table class="description-table" id="descriptionTable">
+            <thead>
+              <tr>
+                <th>과정</th>
+                <th>5대 영재사고력</th>
+              </tr>
+            </thead>
+            <tbody id="descriptionTableBody">
+              <!-- JavaScript로 생성 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="mathvil-result.js"></script>
+  </body>
+</html>
