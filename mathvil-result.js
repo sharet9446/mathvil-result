@@ -40,10 +40,13 @@ async function fetchAssessmentData() {
           { name: "변화와 관계", total: 24.5, score: 3, average: 37 },
           { name: "자료와 가능성", total: 29.5, score: 19.5, average: 34 },
         ],
-        skills: {
-          my: [0, 10, 0, 36, 0], // 수리, 논리독해, 카운팅, 공간, 추리
-          average: [49, 39, 30, 41, 42],
-        },
+        skills: [
+          { name: "수리", score: 0, average: 49 },
+          { name: "논리독해", score: 10, average: 39 },
+          { name: "카운팅", score: 0, average: 30 },
+          { name: "공간", score: 36, average: 41 },
+          { name: "추리", score: 0, average: 42 },
+        ],
         descriptions: [
           {
             title: "수리",
@@ -141,21 +144,7 @@ function createQuestionTables(questions) {
   }
 }
 
-// tbody를 비우고 반환하는 함수
-function clearTbody(tbodyId) {
-  const tbody = document.getElementById(tbodyId);
-  tbody.innerHTML = "";
-  return tbody;
-}
-
-// tbody에 행을 추가하는 함수
-function appendRow(tbody, htmlString) {
-  const row = document.createElement("tr");
-  row.innerHTML = htmlString;
-  tbody.appendChild(row);
-}
-
-// 단원별 분석 표 생성
+// 영역별 분석 표 생성
 function createAnalysisTable(units) {
   const tbody = clearTbody("analysisTableBody");
 
@@ -172,10 +161,10 @@ function createAnalysisTable(units) {
             <td class="unit-name"><strong>${index + 1}</strong> ${
         unit.name
       }</td>
-            <td>${unit.total}</td>
-            <td style="color:  #ff6b35; font-weight: bold;">${unit.score}</td>
-            <td style="color: #ff6b35; font-weight: bold;">${percentage}%</td>
-            <td>${unit.average}%</td>
+            <td class="cell-total">${unit.total}</td>
+            <td class="cell-score">${unit.score}</td>
+            <td class="cell-percentage">${percentage}%</td>
+            <td class="cell-average">${unit.average}%</td>
         `
     );
     totalScore += unit.score;
@@ -186,49 +175,41 @@ function createAnalysisTable(units) {
   const totalPercentage =
     totalMax > 0 ? Math.round((totalScore / totalMax) * 100) : 0;
   const totalRow = document.createElement("tr");
-  totalRow.style.borderTop = "2px solid #333";
+  totalRow.className = "analysis-total";
   totalRow.innerHTML = `
         <td style="font-weight: bold; text-align: center;">계</td>
-        <td style="font-weight: bold;">${totalMax}</td>
-        <td style="color: #ff6b35; font-weight: bold;">${totalScore}</td>
-        <td style="color: #ff6b35; font-weight: bold;">${totalPercentage}%</td>
-        <td style="font-weight: bold;">40%</td>
+        <td class="cell-total">${totalMax}</td>
+        <td class="cell-score">${totalScore}</td>
+        <td class="cell-percentage">${totalPercentage}%</td>
+        <td class="cell-average">40%</td>
     `;
   tbody.appendChild(totalRow);
 }
 
-// 5대 영재사고력 표 생성
+// 영재사고력 표 생성
 function createSkillsTable(skills) {
   const tbody = clearTbody("skillsTableBody");
 
   // 나의 점수 행
-  appendRow(
-    tbody,
-    `
-        <td class="skill-name">나의 점수</td>
-        <td class="percentage-my">${skills.my[0]}%</td>
-        <td class="percentage-my">${skills.my[1]}%</td>
-        <td class="percentage-my">${skills.my[2]}%</td>
-        <td class="percentage-my">${skills.my[3]}%</td>
-        <td class="percentage-my">${skills.my[4]}%</td>
-    `
-  );
+  const myScoreRow = `
+    <td class="skill-name">나의 점수</td>
+    ${skills
+      .map((skill) => `<td class="skill-percentage-my">${skill.score}%</td>`)
+      .join("")}
+  `;
+  appendRow(tbody, myScoreRow);
 
-  // 평균 행
-  appendRow(
-    tbody,
-    `
-        <td class="skill-name">평균</td>
-        <td class="percentage-avg">${skills.average[0]}%</td>
-        <td class="percentage-avg">${skills.average[1]}%</td>
-        <td class="percentage-avg">${skills.average[2]}%</td>
-        <td class="percentage-avg">${skills.average[3]}%</td>
-        <td class="percentage-avg">${skills.average[4]}%</td>
-    `
-  );
+  // 평균 점수 행
+  const avgScoreRow = `
+    <td class="skill-name">평균</td>
+    ${skills
+      .map((skill) => `<td class="skill-percentage-avg">${skill.average}%</td>`)
+      .join("")}
+  `;
+  appendRow(tbody, avgScoreRow);
 }
 
-// 설명 표 생성
+// 영재사고력 설명 생성
 function createDescriptionTable(descriptions) {
   const tbody = clearTbody("descriptionTableBody");
 
@@ -243,189 +224,171 @@ function createDescriptionTable(descriptions) {
   });
 }
 
+// tbody를 비우고 반환하는 함수
+function clearTbody(tbodyId) {
+  const tbody = document.getElementById(tbodyId);
+  tbody.innerHTML = "";
+  return tbody;
+}
+
+// tbody에 행을 추가하는 함수
+function appendRow(tbody, htmlString) {
+  const row = document.createElement("tr");
+  row.innerHTML = htmlString;
+  tbody.appendChild(row);
+}
+
 // 막대 차트 그리기
 function drawBarChart(units) {
-  const canvas = document.getElementById("barChart");
-  const ctx = canvas.getContext("2d");
+  const ctx = document.getElementById("barChart");
 
-  canvas.width = canvas.offsetWidth * 2;
-  canvas.height = canvas.offsetHeight * 2;
-  ctx.scale(2, 2);
+  const label = units.map((unit) => unit.name);
+  const myScore = units.map((unit) => unit.score);
+  const avgScore = units.map((unit) => unit.average);
 
-  const width = canvas.offsetWidth;
-  const height = canvas.offsetHeight;
-  const padding = 40;
-  const chartWidth = width - 2 * padding;
-  const chartHeight = height - 2 * padding;
-
-  // 배경
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, width, height);
-
-  // 수평선
-  ctx.strokeStyle = "#e0e0e0";
-  ctx.lineWidth = 1;
-  for (let i = 0; i <= 6; i++) {
-    const y = padding + (chartHeight * i) / 6;
-    ctx.beginPath();
-    ctx.moveTo(padding, y);
-    ctx.lineTo(width - padding, y);
-    ctx.stroke();
-
-    ctx.fillStyle = "#666";
-    ctx.font = "12px sans-serif";
-    ctx.textAlign = "right";
-    ctx.fillText((30 - i * 5).toString(), padding - 10, y + 4);
-  }
-
-  const barWidth = chartWidth / (units.length * 2 + 1);
-
-  const averagePoints = [];
-
-  units.forEach((unit, index) => {
-    const x = padding + (index * 2 + 1) * barWidth;
-
-    const myRatio = unit.total > 0 ? unit.score / unit.total : 0;
-    const avgRatio = unit.total > 0 ? unit.average / unit.total : 0;
-
-    const myBarHeight = myRatio * chartHeight;
-    const avgY = height - padding - avgRatio * chartHeight;
-    averagePoints.push({ x: x + barWidth * 0.4, y: avgY });
-
-    // 막대: 나의 점수
-    ctx.fillStyle = "#ff6b35";
-    ctx.fillRect(
-      x,
-      height - padding - myBarHeight,
-      barWidth * 0.8,
-      myBarHeight
-    );
-
-    // X축 라벨
-    ctx.fillStyle = "#666";
-    ctx.font = "10px sans-serif";
-    ctx.textAlign = "center";
-    const labelText =
-      unit.name.length > 4 ? unit.name.substring(0, 4) + "..." : unit.name;
-    ctx.fillText(labelText, x + barWidth * 0.4, height - 10);
-  });
-
-  // 꺾은선: 평균
-  ctx.beginPath();
-  ctx.strokeStyle = "#6c9bd1";
-  ctx.lineWidth = 2;
-
-  averagePoints.forEach((pt, i) => {
-    if (i === 0) {
-      ctx.moveTo(pt.x, pt.y);
-    } else {
-      ctx.lineTo(pt.x, pt.y);
-    }
-  });
-  ctx.stroke();
-
-  // 평균 점마다 원 표시
-  averagePoints.forEach((pt) => {
-    ctx.beginPath();
-    ctx.arc(pt.x, pt.y, 3, 0, Math.PI * 2);
-    ctx.fillStyle = "#6c9bd1";
-    ctx.fill();
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: label,
+      datasets: [
+        {
+          label: "나의 점수",
+          data: myScore,
+          backgroundColor: "#ff6b35",
+          borderColor: "#ff6b35",
+          borderWidth: 1,
+        },
+        {
+          label: "평균",
+          data: avgScore,
+          type: "line",
+          borderColor: "#307df1",
+          backgroundColor: "#307df1",
+          borderWidth: 2,
+          fill: false,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: "top",
+          align: "end",
+        },
+      },
+      scales: {
+        x: {
+          grid: {
+            display: false,
+          },
+        },
+        y: {
+          grid: {
+            display: true,
+            color: "rgba(0, 0, 0, 0.1)",
+          },
+          beginAtZero: true,
+        },
+      },
+    },
   });
 }
 
 // 레이더 차트 그리기
 function drawRadarChart(skills) {
-  const canvas = document.getElementById("radarChart");
-  const ctx = canvas.getContext("2d");
+  const ctx = document.getElementById("radarChart");
+  ctx.style.backgroundColor = "transparent";
 
-  canvas.width = 400 * 2;
-  canvas.height = 400 * 2;
-  ctx.scale(2, 2);
+  const label = skills.map((skill) => skill.name);
+  const myScore = skills.map((skill) => skill.score / 10);
+  const averageScore = skills.map((skill) => skill.average / 10);
 
-  const centerX = 200;
-  const centerY = 200;
-  const radius = 120;
-  const skillNames = ["수리", "논리독해", "카운팅", "공간", "추리"];
-
-  // 배경 그리기
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, 400, 400);
-
-  // 격자 그리기
-  ctx.strokeStyle = "#e0e0e0";
-  ctx.lineWidth = 1;
-
-  // 동심원 그리기
-  for (let i = 1; i <= 5; i++) {
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, (radius * i) / 5, 0, 2 * Math.PI);
-    ctx.stroke();
-  }
-
-  // 축 그리기
-  for (let i = 0; i < 5; i++) {
-    const angle = (i * 2 * Math.PI) / 5 - Math.PI / 2;
-    const x = centerX + Math.cos(angle) * radius;
-    const y = centerY + Math.sin(angle) * radius;
-
-    ctx.beginPath();
-    ctx.moveTo(centerX, centerY);
-    ctx.lineTo(x, y);
-    ctx.stroke();
-
-    // 라벨 그리기
-    const labelX = centerX + Math.cos(angle) * (radius + 30);
-    const labelY = centerY + Math.sin(angle) * (radius + 30);
-
-    ctx.fillStyle = "#333";
-    ctx.font = "16px sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText(skillNames[i], labelX, labelY + 6);
-  }
-
-  // 나의 점수 그리기
-  ctx.strokeStyle = "#ff6b35";
-  ctx.fillStyle = "rgba(255, 107, 53, 0.2)";
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-
-  for (let i = 0; i < 5; i++) {
-    const angle = (i * 2 * Math.PI) / 5 - Math.PI / 2;
-    const value = skills.my[i] / 100;
-    const x = centerX + Math.cos(angle) * radius * value;
-    const y = centerY + Math.sin(angle) * radius * value;
-
-    if (i === 0) {
-      ctx.moveTo(x, y);
-    } else {
-      ctx.lineTo(x, y);
-    }
-  }
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-
-  // 평균 그리기
-  ctx.strokeStyle = "#6c9bd1";
-  ctx.fillStyle = "rgba(108, 155, 209, 0.2)";
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-
-  for (let i = 0; i < 5; i++) {
-    const angle = (i * 2 * Math.PI) / 5 - Math.PI / 2;
-    const value = skills.average[i] / 100;
-    const x = centerX + Math.cos(angle) * radius * value;
-    const y = centerY + Math.sin(angle) * radius * value;
-
-    if (i === 0) {
-      ctx.moveTo(x, y);
-    } else {
-      ctx.lineTo(x, y);
-    }
-  }
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
+  new Chart(ctx, {
+    type: "radar",
+    data: {
+      labels: label,
+      datasets: [
+        {
+          label: "나의 점수",
+          data: myScore,
+          borderColor: "#ff6b35",
+          backgroundColor: "rgba(255, 107, 71, 0.1)",
+          pointBackgroundColor: "#ff6b35",
+          pointBorderColor: "#ff6b35",
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          borderWidth: 2,
+        },
+        {
+          label: "평균",
+          data: averageScore,
+          borderColor: "#b1c7fe",
+          backgroundColor: "rgba(74, 144, 226, 0.1)",
+          pointBackgroundColor: "#b1c7fe",
+          pointBorderColor: "#b1c7fe",
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          borderWidth: 2,
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        legend: {
+          display: true,
+          position: "top",
+          align: "end",
+          labels: {
+            usePointStyle: true,
+            pointStyle: "line",
+            font: {
+              size: 12,
+            },
+          },
+        },
+      },
+      scales: {
+        r: {
+          beginAtZero: true,
+          max: 12,
+          min: 0,
+          ticks: {
+            stepSize: 2,
+            display: false,
+          },
+          grid: {
+            color: "#b6b6b6",
+            lineWidth: 1,
+          },
+          angleLines: {
+            color: "rgba(200, 200, 200, 0.3)",
+            lineWidth: 0,
+          },
+          pointLabels: {
+            font: {
+              size: 13,
+              weight: "normal",
+            },
+            color: "#666",
+            padding: 15,
+          },
+        },
+      },
+      elements: {
+        line: {
+          tension: 0,
+        },
+        point: {
+          borderWidth: 2,
+        },
+      },
+    },
+  });
 }
 
 // 모든 데이터를 렌더링하는 함수

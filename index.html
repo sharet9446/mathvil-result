@@ -17,7 +17,7 @@
         </div>
       </header>
 
-      <div class="content">
+      <main class="content">
         <!-- 점수 섹션 -->
         <div class="score-section">
           <div class="score-title">
@@ -31,7 +31,7 @@
         </div>
 
         <!-- 문항별 득점 -->
-        <div class="question-section">
+        <div>
           <div class="section-title">문항별 득점</div>
           <div class="question-note">
             * 문항 번호를 누르면 자세히 볼 수 있습니다.
@@ -41,26 +41,17 @@
           </div>
         </div>
 
-        <div class="chart-analysis-row">
-          <!-- 영역별 분석 차트 -->
-          <div class="chart-section">
+        <!-- 영역별 분석 -->
+        <div>
+          <div class="chart-analysis">
             <div class="section-title">영역별 분석</div>
-            <div class="legend">
-              <div class="legend-item">
-                <div class="legend-color legend-my"></div>
-                <span>나의 점수</span>
-              </div>
-              <div class="legend-item">
-                <div class="legend-color legend-avg"></div>
-                <span>평균</span>
-              </div>
-            </div>
-            <div class="chart-container">
-              <canvas id="barChart" class="bar-chart"></canvas>
+
+            <div class="bar-chart">
+              <canvas id="barChart"></canvas>
             </div>
 
-            <!-- 단원별 분석 표 -->
-            <table class="analysis-table">
+            <!-- 영역별 분석 표 -->
+            <table class="analysis-table table-common">
               <thead>
                 <tr>
                   <th>영역</th>
@@ -76,25 +67,15 @@
             </table>
           </div>
 
-          <!-- 5대 영재사고력 -->
-          <div class="radar-section">
+          <!-- 영재사고력 -->
+          <div>
             <div class="section-title">5대 영재사고력</div>
-            <div class="legend">
-              <div class="legend-item">
-                <div class="legend-color legend-my"></div>
-                <span>나의 점수</span>
-              </div>
-              <div class="legend-item">
-                <div class="legend-color legend-avg"></div>
-                <span>평균</span>
-              </div>
-            </div>
-            <div class="radar-chart-container">
-              <canvas id="radarChart" class="radar-chart"></canvas>
+            <div class="radar-chart">
+              <canvas id="radarChart"></canvas>
             </div>
 
-            <!-- 5대 영재사고력 표 -->
-            <table class="skills-table">
+            <!-- 영재사고력 표 -->
+            <table class="skills-table table-common">
               <thead>
                 <tr>
                   <th>분야</th>
@@ -112,8 +93,8 @@
           </div>
         </div>
 
-        <!-- 과정별 설명 표 -->
-        <div class="description-table-section">
+        <!-- 영재사고력 설명 -->
+        <div class="description-table-section table-common">
           <table class="description-table" id="descriptionTable">
             <thead>
               <tr>
@@ -126,9 +107,10 @@
             </tbody>
           </table>
         </div>
-      </div>
+      </main>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="mathvil-result.js"></script>
   </body>
 </html>
