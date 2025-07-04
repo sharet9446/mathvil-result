@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>매쓰빌</title>
     <link rel="stylesheet" href="mathvil-result.css" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
   </head>
   <body>
     <div class="container">
       <header class="header">
-        <div class="home-icon">🏠</div>
-        <h1>진단결과</h1>
+        <div class="home-icon">
+          <a href="https://mathvil.com/KR/dtest/?type=a">🏠</a>
+        </div>
+        <h1>진단 결과</h1>
         <div>
           <div class="grade-badge" id="difficultyLevel">사고력</div>
           <div class="age" id="studentAge">6세</div>
@@ -21,11 +24,11 @@
         <!-- 점수 섹션 -->
         <div class="score-section">
           <div class="score-title">
-            <span class="score-main" id="totalScore">0</span>
+            <span class="score-number" id="totalScore">0</span>
             <span class="score-unit">점</span>
           </div>
-          <h2 id="scoreTitle">결과를 불러오는 중...</h2>
-          <div class="score-message">
+          <h2 class="score-message" id="scoreTitle">결과를 불러오는 중...</h2>
+          <div class="score-explanation">
             <p id="scoreDescription">잠시만 기다려주세요.</p>
           </div>
         </div>
@@ -98,7 +101,7 @@
           <table class="description-table" id="descriptionTable">
             <thead>
               <tr>
-                <th>과정</th>
+                <th class="skill-category">과정</th>
                 <th>5대 영재사고력</th>
               </tr>
             </thead>

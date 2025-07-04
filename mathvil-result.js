@@ -1,62 +1,70 @@
 // 전역 변수로 데이터 저장
 let assessmentData = null;
+let barChartInstance;
 
 // 백엔드에서 데이터를 받아오는 함수 (실제 구현 시 API 호출)
 async function fetchAssessmentData() {
   return new Promise((resolve) => {
     setTimeout(() => {
+      const questions = [
+        { number: 1, totalPoints: 7, obtainedPoints: 0 },
+        { number: 2, totalPoints: 6, obtainedPoints: 0 },
+        { number: 3, totalPoints: 7, obtainedPoints: 0 },
+        { number: 4, totalPoints: 7, obtainedPoints: 3 },
+        { number: 5, totalPoints: 7, obtainedPoints: 0 },
+        { number: 6, totalPoints: 7, obtainedPoints: 0 },
+        { number: 7, totalPoints: 7, obtainedPoints: 0 },
+        { number: 8, totalPoints: 7, obtainedPoints: 7 },
+        { number: 9, totalPoints: 6, obtainedPoints: 6 },
+        { number: 10, totalPoints: 6, obtainedPoints: 6 },
+        { number: 11, totalPoints: 7, obtainedPoints: 7 },
+        { number: 12, totalPoints: 6, obtainedPoints: 6 },
+        { number: 13, totalPoints: 7, obtainedPoints: 7 },
+        { number: 14, totalPoints: 6, obtainedPoints: 6 },
+        { number: 15, totalPoints: 7, obtainedPoints: 7 },
+      ];
+
+      const totalScore = questions.reduce(
+        (acc, q) => acc + q.obtainedPoints,
+        0
+      );
+
       resolve({
         student: {
           age: "6세",
           difficultyLevel: "사고력",
         },
         score: {
-          total: 30,
+          total: totalScore,
           maxScore: 100,
-          title: "자신감을 가지고 개념을 다시 정리해 보세요.",
+          title: "조금 아쉽지만 칭찬받을 수 있는 점수입니다.",
           description:
-            "개념과 원리에 대한 이해가 부족해요.\n차신감을 가지고, 천천히 다시 학습해 보세요. 기초부터 다시 시작하면 더 나아질 수 있어요. 당신은 할 수 있어요!",
+            "수학의 기본이 잘 되어 있으며, 응용 문제도 잘 풀고 있습니다. 체계적인 사고력 수학 학습을 통해 더 높은 수준으로 도약해 보세요. 꾸준히 노력하는 당신은 곧 큰 성과를 이룰 수 있을 거예요. 더 많은 연습과 복습을 통해 자신감을 키워보세요!",
         },
-        questions: [
-          { number: 1, totalPoints: 7, obtainedPoints: 0 },
-          { number: 2, totalPoints: 6, obtainedPoints: 0 },
-          { number: 3, totalPoints: 7, obtainedPoints: 0 },
-          { number: 4, totalPoints: 7, obtainedPoints: 0 },
-          { number: 5, totalPoints: 7, obtainedPoints: 0 },
-          { number: 6, totalPoints: 7, obtainedPoints: 0 },
-          { number: 7, totalPoints: 7, obtainedPoints: 0 },
-          { number: 8, totalPoints: 7, obtainedPoints: 4 },
-          { number: 9, totalPoints: 6, obtainedPoints: 0 },
-          { number: 10, totalPoints: 6, obtainedPoints: 0 },
-          { number: 11, totalPoints: 7, obtainedPoints: 7 },
-          { number: 12, totalPoints: 6, obtainedPoints: 6 },
-          { number: 13, totalPoints: 7, obtainedPoints: 0 },
-          { number: 14, totalPoints: 6, obtainedPoints: 0 },
-          { number: 15, totalPoints: 7, obtainedPoints: 7 },
-        ],
+        questions, // 변수 이름과 key가 같을 때 단축 표현 가능
         units: [
           { name: "수와 연산", total: 20, score: 0, average: 45 },
-          { name: "도형과 측정", total: 26, score: 7.5, average: 43 },
-          { name: "변화와 관계", total: 24.5, score: 3, average: 37 },
-          { name: "자료와 가능성", total: 29.5, score: 19.5, average: 34 },
+          { name: "도형과 측정", total: 26, score: 19.5, average: 43 },
+          { name: "변화와 관계", total: 24.5, score: 6, average: 37 },
+          { name: "자료와 가능성", total: 29.5, score: 29.5, average: 34 },
         ],
         skills: [
-          { name: "수리", score: 0, average: 49 },
-          { name: "논리독해", score: 10, average: 39 },
-          { name: "카운팅", score: 0, average: 30 },
-          { name: "공간", score: 36, average: 41 },
-          { name: "추리", score: 0, average: 42 },
+          { name: "수리", score: 5, average: 49 },
+          { name: "논리독해", score: 73, average: 39 },
+          { name: "카운팅", score: 100, average: 30 },
+          { name: "공간", score: 68, average: 41 },
+          { name: "추리", score: 20, average: 42 },
         ],
         descriptions: [
           {
             title: "수리",
             content:
-              "숫자의 이해과 순서를 이해하고, 수를 세고 비교하는 능력을 길러야 합니다. 기본적인 덧셈과 뺄셈을 통해 수의 관계를 이해하는 것도 중요합니다.",
+              "숫자의 이름과 순서를 이해하고, 수를 세고 비교하는 능력을 길러야 합니다. 기본적인 덧셈과 뺄셈을 통해 수의 관계를 이해하는 것도 중요합니다.",
           },
           {
             title: "논리 독해",
             content:
-              "다양한 모양을 인식하고 구별할 수 있어야 하며, 공간의 관계를 이해하는 능력을 기려야 합니다. 도형의 위치나 방향을 이해하고 설명할 수 있어야 합니다.",
+              "다양한 모양을 인식하고 구별할 수 있어야 하며, 공간의 관계를 이해하는 능력을 키워야 합니다. 도형의 위치나 방향을 이해하고 설명할 수 있어야 합니다.",
           },
           {
             title: "카운팅",
@@ -66,12 +74,12 @@ async function fetchAssessmentData() {
           {
             title: "공간",
             content:
-              "간단한 방법으로 데이터를 모으고 정리하는 능력을 배워야 합니다.",
+              "간단한 방법으로 데이터를 모으고 정리하는 능력을 배워야 합니다. 또한 기본적인 그래프와 표를 보고 해석할 수 있어야 합니다.",
           },
           {
             title: "추리",
             content:
-              "단순한 집합을 분류하는 것에 그치지 않고, 이를 창의적으로 활용하고 표현하는 능력입니다.",
+              "단순한 정보를 받아들이는 것에 그치지 않고, 이를 창의적으로 활용하고 표현하는 능력입니다.",
           },
         ],
       });
@@ -132,10 +140,10 @@ function createQuestionTables(questions) {
     const obtainedPointsRow = document.createElement("tr");
     obtainedPointsRow.innerHTML = `<td class="row-header">득점</td>`;
     tableQuestions.forEach((q) => {
-      const isCorrect = q.obtainedPoints > 0;
-      const className = isCorrect
-        ? "obtained-points correct"
-        : "obtained-points";
+      const className =
+        q.obtainedPoints === q.totalPoints
+          ? "obtained-points correct"
+          : "obtained-points";
       obtainedPointsRow.innerHTML += `<td class="${className}">${q.obtainedPoints}</td>`;
     });
     table.appendChild(obtainedPointsRow);
@@ -158,9 +166,9 @@ function createAnalysisTable(units) {
     appendRow(
       tbody,
       `
-            <td class="unit-name"><strong>${index + 1}</strong> ${
-        unit.name
-      }</td>
+            <td class="unit-names"><span class=unit-number>${
+              index + 1
+            }</span><span class="unit-name">${unit.name}</span></td>
             <td class="cell-total">${unit.total}</td>
             <td class="cell-score">${unit.score}</td>
             <td class="cell-percentage">${percentage}%</td>
@@ -242,11 +250,16 @@ function appendRow(tbody, htmlString) {
 function drawBarChart(units) {
   const ctx = document.getElementById("barChart");
 
+  // 기존에 차트가 그려져 있으면 먼저 삭제
+  if (barChartInstance) {
+    barChartInstance.destroy();
+  }
+
   const label = units.map((unit) => unit.name);
   const myScore = units.map((unit) => unit.score);
-  const avgScore = units.map((unit) => unit.average);
+  const avgScore = units.map((unit) => unit.average * (unit.total / 100));
 
-  new Chart(ctx, {
+  barChartInstance = new Chart(ctx, {
     type: "bar",
     data: {
       labels: label,
@@ -257,6 +270,8 @@ function drawBarChart(units) {
           backgroundColor: "#ff6b35",
           borderColor: "#ff6b35",
           borderWidth: 1,
+          order: 2, // 나의 점수 z-index를 두 번째로 설정
+          barThickness: 40, // 막대 두께
         },
         {
           label: "평균",
@@ -266,19 +281,31 @@ function drawBarChart(units) {
           backgroundColor: "#307df1",
           borderWidth: 2,
           fill: false,
-          pointRadius: 0,
+          pointRadius: 0, // 점 표시 안 함
           pointHoverRadius: 4,
+          order: 1, // 평균 z-index를 첫 번째로 설정
         },
       ],
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      responsive: true, // 반응형 차트
+      maintainAspectRatio: false, // 차트 크기 자동 조정
       plugins: {
         legend: {
           display: true,
           position: "top",
           align: "end",
+          labels: {
+            font: {
+              size: 16,
+            },
+            color: "#666",
+            padding: 32,
+            sort: (a, b) => {
+              const order = ["나의 점수", "평균"];
+              return order.indexOf(a.text) - order.indexOf(b.text);
+            },
+          },
         },
       },
       scales: {
@@ -286,13 +313,30 @@ function drawBarChart(units) {
           grid: {
             display: false,
           },
+          ticks: {
+            color: "#666",
+            font: {
+              size: 20,
+              weight: "bold",
+              family: "Arial",
+            },
+          },
         },
         y: {
           grid: {
             display: true,
-            color: "rgba(0, 0, 0, 0.1)",
+            color: "rgba(94, 61, 61, 0.1)",
+          },
+          ticks: {
+            color: "#c3c3c3",
+            stepSize: 5,
+            font: {
+              size: 20,
+              family: "Arial",
+            },
           },
           beginAtZero: true,
+          stacked: false,
         },
       },
     },
@@ -305,8 +349,8 @@ function drawRadarChart(skills) {
   ctx.style.backgroundColor = "transparent";
 
   const label = skills.map((skill) => skill.name);
-  const myScore = skills.map((skill) => skill.score / 10);
-  const averageScore = skills.map((skill) => skill.average / 10);
+  const myScore = skills.map((skill) => skill.score);
+  const averageScore = skills.map((skill) => skill.average);
 
   new Chart(ctx, {
     type: "radar",
@@ -347,18 +391,20 @@ function drawRadarChart(skills) {
             usePointStyle: true,
             pointStyle: "line",
             font: {
-              size: 12,
+              size: 16,
             },
+            color: "#666",
+            padding: 32,
           },
         },
       },
       scales: {
         r: {
           beginAtZero: true,
-          max: 12,
+          max: 100,
           min: 0,
           ticks: {
-            stepSize: 2,
+            stepSize: 100 / 6,
             display: false,
           },
           grid: {
@@ -371,8 +417,8 @@ function drawRadarChart(skills) {
           },
           pointLabels: {
             font: {
-              size: 13,
-              weight: "normal",
+              size: 20,
+              family: "PretendardM",
             },
             color: "#666",
             padding: 15,

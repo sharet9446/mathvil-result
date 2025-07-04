@@ -1,3 +1,30 @@
+/* HGAlmond 폰트 */
+@font-face {
+  font-family: "HGAlmond40";
+  src: url("./fonts/HGAlmond40g.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "HGAlmond60";
+  src: url("./fonts/HGAlmond60g.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "HGAlmond80";
+  src: url("./fonts/HGAlmond80g.ttf") format("truetype");
+}
+
+/* Pretender 폰트 */
+@font-face {
+  font-family: "PretendardM";
+  src: url("./fonts/Pretendard-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "PretendardB";
+  src: url("./fonts/Pretendard-Bold.ttf") format("truetype");
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -27,7 +54,7 @@ body {
   position: relative;
   background-color: #b1c7fe;
   padding: 40px 90px;
-  margin: 30px 40px;
+  margin: 50px 40px;
   border-radius: 60px;
 }
 
@@ -44,7 +71,7 @@ body {
 .header h1 {
   color: #ff6b35;
   font-size: 40px;
-  font-weight: bold;
+  font-family: "HGAlmond60";
   text-align: center;
   flex: 1;
 }
@@ -59,16 +86,16 @@ body {
 .header .grade-badge {
   background: #ff6b35;
   color: white;
-  padding: 12px 20px;
-  border-radius: 20px;
-  font-size: 18px;
-  font-weight: bold;
+  padding: 4px 12px 2px 8px;
+  border-radius: 12px;
+  font-size: 20px;
+  font-family: "HGAlmond60";
 }
 
 .header .age {
   color: #333;
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 28px;
+  font-family: "HGAlmond60";
 }
 
 /* 메인 스타일 */
@@ -79,9 +106,9 @@ body {
 
 .section-title {
   color: #ff6b35;
-  font-size: 32px;
-  font-weight: bold;
-  margin: 60px 0 20px 0;
+  font-size: 36px;
+  font-family: "HGAlmond60";
+  margin: 80px 0 20px 0;
 }
 
 /* 점수 섹션 스타일 */
@@ -91,38 +118,45 @@ body {
 }
 
 .score-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 20px;
 }
 
-.score-main {
-  font-size: 60px;
-  font-weight: bold;
+.score-number {
+  font-size: 96px;
+  font-family: "HGAlmond80";
   color: #ff6b35;
   margin-bottom: 20px;
+  line-height: 1;
+  margin: 0;
 }
 
 .score-unit {
-  font-size: 48px;
-  color: #333;
+  font-size: 30px;
+  font-family: "PretendardB";
+  margin-left: 8px;
+  color: #666666;
 }
 
 .score-message {
-  background: #f8f9fa;
+  font-size: 24px;
+  font-family: "HGAlmond60";
+}
+
+.score-explanation {
+  background: #f3f3f3;
   padding: 40px;
   border-radius: 20px;
-  margin: 40px 0;
+  margin: 20px 0;
   text-align: center;
 }
 
-.score-message h3 {
-  color: #333;
-  margin-bottom: 20px;
-  font-size: 28px;
-}
-
-.score-message p {
+.score-explanation p {
   color: #666;
   font-size: 20px;
+  font-family: "PretendardM";
   line-height: 1.6;
 }
 
@@ -151,8 +185,6 @@ body {
 }
 
 .question-header {
-  font-weight: bold;
-  color: #333;
   font-size: 16px;
   border-bottom: 2px solid #b1c7fe;
 }
@@ -168,13 +200,11 @@ body {
 
 .question-table .row-header {
   font-weight: bold;
-  color: #333;
   width: 60px;
   min-width: 60px;
 }
 
 .question-table .question-number {
-  font-weight: bold;
   background-color: #e7f1ff;
   color: #2f80ed;
   border-radius: 50px;
@@ -208,7 +238,8 @@ body {
 
 .bar-chart {
   width: 100%;
-  height: 450px;
+  height: 500px;
+  margin-bottom: 40px;
 }
 
 /* 공통 테이블 스타일 */
@@ -246,15 +277,23 @@ body {
 
 .table-common th {
   color: #333;
-  font-weight: bold;
+  font-size: 18px;
+  font-family: "PretendardB";
 }
 
 /* 영역별 분석 표 */
 
-.analysis-table .unit-name strong {
+.analysis-table .unit-number {
   color: #333;
-  font-weight: bold;
+  font-family: "PretendardB";
   font-size: 18px;
+}
+
+.analysis-table .unit-name {
+  color: #666;
+  font-family: "PretendardM";
+  font-size: 18px;
+  margin-left: 10px;
 }
 
 .analysis-table .cell-total,
@@ -294,14 +333,10 @@ body {
 
 /* 5대 영재사고력 표 섹션 스타일 */
 
-.skills-table th,
-.skills-table td {
-  font-size: 15px;
-}
-
-.skills-table .skill-name {
-  color: #333;
-  font-weight: bold;
+.skills-table .skill-name,
+.description-table .skill-category {
+  font-size: 18px;
+  font-family: "PretendardB";
 }
 
 .skills-table .skill-percentage-my {
@@ -326,6 +361,10 @@ body {
   overflow: hidden;
 }
 
+.description-table .skill-category {
+  padding-left: 5vw;
+}
+
 .description-table th {
   color: #333;
   font-weight: bold;
@@ -336,26 +375,20 @@ body {
 .description-table td {
   padding: 20px;
   vertical-align: top;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.6;
-}
-
-.description-table .skill-category {
-  width: 100px;
-  font-weight: bold;
-  text-align: center;
 }
 
 .description-table .skill-description {
   color: #666;
-  padding-left: 20px;
+  font-family: "PretendardM";
 }
 
 /* 태블릿 대응 */
 
 @media (max-width: 1200px) {
   .content {
-    padding: 30px;
+    padding: 10px 40px;
   }
 
   .chart-analysis-row {
